@@ -37,3 +37,4 @@ text <- readLines("https://slcladal.github.io/data/orwell.txt") %>%
   paste0(collapse = " ")
 # show the first 500 characters of the text
 substr(text, start=1, stop=500)
+
