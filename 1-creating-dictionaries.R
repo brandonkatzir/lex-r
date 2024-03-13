@@ -91,4 +91,41 @@ head(text_dict, 10)
 # Correcting and extending dictionaries ########################################
 ################################################################################
 
+# generate dictionary
+text_dict_ext <- text_dict %>%
+  # removing an entry
+  dplyr::filter(!(lemma == "a" & upos == "NOUN")) %>%
+  # editing entries
+  dplyr::mutate(upos = ifelse(lemma == "aback" & upos == "NOUN", "PREP", upos)) %>%
+  # adding comments 
+  dplyr::mutate(comment = dplyr::case_when(lemma == "a" ~ "also an before vowels",
+                                           lemma == "Aaronson" ~ "Name of someone.", 
+                                           T ~ ""))
+# inspect
+head(text_dict_ext, 10)
+
+# adds sentiment analysis
+
+# generate dictionary
+text_dict_snt <- text_dict_ext %>%
+  dplyr::mutate(word = lemma) %>%
+  dplyr::left_join(get_sentiments("nrc")) %>%
+  dplyr::group_by(token, lemma, upos, comment) %>%
+  dplyr::summarise(sentiment = paste0(sentiment, collapse = ", "))
+# inspect
+head(text_dict_snt, 100) 
+
+print(text_dict_snt,n=100)
+
+################################################################################
+# Generating dictionaries for other languages ##################################
+################################################################################
+
+
+
+
+
+
+
+
 
